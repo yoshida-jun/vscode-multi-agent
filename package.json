@@ -2,7 +2,7 @@
   "name": "vscode-multi-agent",
   "displayName": "Multi-Agent Manager",
   "description": "Manage Claude Code and Gemini CLI agents in VSCode",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "yoshida-jun",
   "license": "MIT",
   "repository": {
