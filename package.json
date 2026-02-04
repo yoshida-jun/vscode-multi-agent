@@ -1,0 +1,183 @@
+{
+  "name": "vscode-multi-agent",
+  "displayName": "Multi-Agent Manager",
+  "description": "Manage Claude Code and Gemini CLI agents in VSCode",
+  "version": "0.1.0",
+  "publisher": "yoshida-jun",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yoshida-jun/vscode-multi-agent"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "multi-agent.claude",
+        "name": "claude",
+        "fullName": "Claude Code",
+        "description": "Execute tasks with Claude Code CLI",
+        "isSticky": true
+      },
+      {
+        "id": "multi-agent.gemini",
+        "name": "gemini",
+        "fullName": "Gemini CLI",
+        "description": "Execute tasks with Gemini CLI",
+        "isSticky": true
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "multi-agent-tasks",
+          "title": "AI Agents",
+          "icon": "$(hubot)"
+        }
+      ]
+    },
+    "views": {
+      "multi-agent-tasks": [
+        {
+          "id": "multiAgent.inputPanel",
+          "name": "Quick Input",
+          "type": "webview"
+        },
+        {
+          "id": "multiAgent.runningTasks",
+          "name": "Running Tasks"
+        },
+        {
+          "id": "multiAgent.taskHistory",
+          "name": "History"
+        },
+        {
+          "id": "multiAgent.automations",
+          "name": "Automations"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "multiAgent.startTask",
+        "title": "Start Agent Task",
+        "category": "Multi-Agent",
+        "icon": "$(play)"
+      },
+      {
+        "command": "multiAgent.runParallel",
+        "title": "Run on Both Agents (Parallel)",
+        "category": "Multi-Agent",
+        "icon": "$(run-all)"
+      },
+      {
+        "command": "multiAgent.openTaskPanel",
+        "title": "Open Multi-Task Panel",
+        "category": "Multi-Agent",
+        "icon": "$(window)"
+      },
+      {
+        "command": "multiAgent.cancelTask",
+        "title": "Cancel Task",
+        "category": "Multi-Agent",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "multiAgent.viewTaskOutput",
+        "title": "View Task Output",
+        "category": "Multi-Agent",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "multiAgent.refreshTasks",
+        "title": "Refresh Tasks",
+        "category": "Multi-Agent",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "multiAgent.createAutomation",
+        "title": "Create Automation",
+        "category": "Multi-Agent",
+        "icon": "$(add)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "multiAgent.refreshTasks",
+          "when": "view == multiAgent.runningTasks",
+          "group": "navigation"
+        },
+        {
+          "command": "multiAgent.startTask",
+          "when": "view == multiAgent.runningTasks",
+          "group": "navigation"
+        },
+        {
+          "command": "multiAgent.createAutomation",
+          "when": "view == multiAgent.automations",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "multiAgent.cancelTask",
+          "when": "view == multiAgent.runningTasks && viewItem == runningTask"
+        },
+        {
+          "command": "multiAgent.viewTaskOutput",
+          "when": "view == multiAgent.taskHistory && viewItem == task"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Multi-Agent Manager",
+      "properties": {
+        "multiAgent.claudePath": {
+          "type": "string",
+          "default": "claude",
+          "description": "Path to Claude Code CLI"
+        },
+        "multiAgent.geminiPath": {
+          "type": "string",
+          "default": "gemini",
+          "description": "Path to Gemini CLI"
+        },
+        "multiAgent.maxConcurrentTasks": {
+          "type": "number",
+          "default": 5,
+          "description": "Maximum concurrent tasks"
+        },
+        "multiAgent.useDaemon": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use WSL/tmux daemon for Claude and Gemini (requires WSL + tmux setup)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.x",
+    "@types/vscode": "^1.90.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.0"
+  }
+}
